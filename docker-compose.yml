@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  # Node + Vue CLI + NGINX
+  web:
+    image: webwhales/for-vue-nginx:latest
+    container_name: web
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:8080"
+      - "8000:8000"

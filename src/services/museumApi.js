@@ -12,24 +12,33 @@ export default {
     type = "painting",
     imgonly = "true"
   }) {
-    let url = `${process.env.VUE_APP_RIJKSMUSEUM_API_URL}/${culture}/collection?key=${process.env.VUE_APP_RIJKSMUSEUM_API_KEY}&imgonly=${imgonly}&p=${p}&ps=${ps}&type=${type}&s=${s}`;
+    const url = `${process.env.VUE_APP_RIJKSMUSEUM_API_URL}/${culture}/collection`;
+    const params = {
+      key: process.env.VUE_APP_RIJKSMUSEUM_API_KEY,
+      imgonly,
+      p,
+      ps,
+      type,
+      s
+    };
 
     if (period && period !== "all") {
-      url += `&f.dating.period=${period}`;
+      params["f.dating.period"] = period;
     }
 
     return axios
-      .get(url)
+      .get(url, { params })
       .then(response => response.data)
       .catch(error => error);
   },
   getDetails({ url }) {
+    const httpsUrl = url.replace(/(^\w+:|^)\/\//, "https://");
+    const params = {
+      key: process.env.VUE_APP_RIJKSMUSEUM_API_KEY
+    };
+
     return axios
-      .get(
-        `${url.replace(/(^\w+:|^)\/\//, "https://")}?key=${
-          process.env.VUE_APP_RIJKSMUSEUM_API_KEY
-        }`
-      )
+      .get(httpsUrl, { params })
       .then(response => response.data)
       .catch(error => error);
   }
